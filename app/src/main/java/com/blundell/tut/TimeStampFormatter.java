@@ -1,8 +1,5 @@
 package com.blundell.tut;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Hours;
@@ -11,10 +8,16 @@ import org.joda.time.Months;
 import org.joda.time.Weeks;
 import org.joda.time.Years;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 class TimeStampFormatter {
 
     /**
-     * For use with java.util.Date
+     * todo 2 For use with java.util.Date
+     * get the miliseconds from para to now.
+     * <p/>
+     * after that, change the miliseconds to the appriciate time.
      */
     public String format(Date timestamp) {
         long millisFromNow = getMillisFromNow(timestamp);
@@ -23,6 +26,8 @@ class TimeStampFormatter {
         if (minutesFromNow < 1) {
             return "just now";
         }
+
+//        nếu giờ nhỏ hơn 1 giờ thì xuất ra là phút
         long hoursFromNow = TimeUnit.MILLISECONDS.toHours(millisFromNow);
         if (hoursFromNow < 1) {
             return formatMinutes(minutesFromNow);
@@ -31,10 +36,18 @@ class TimeStampFormatter {
         if (daysFromNow < 1) {
             return formatHours(hoursFromNow);
         }
+
+        // muốn đổi ra week thì phải chia cho số ngày trong tuần
         long weeksFromNow = TimeUnit.MILLISECONDS.toDays(millisFromNow) / 7;
         if (weeksFromNow < 1) {
             return formatDays(daysFromNow);
         }
+
+        // devide by the number of days in months
+        // todo - Therefore this is not 100% accurate but accurate enough for our purposes.
+        /**
+         * todo JodaTime has inherent handling of weeks, months years so it is more accurate than our above method
+         */
         long monthsFromNow = TimeUnit.MILLISECONDS.toDays(millisFromNow) / 30;
         if (monthsFromNow < 1) {
             return formatWeeks(weeksFromNow);
@@ -53,7 +66,7 @@ class TimeStampFormatter {
     }
 
     /**
-     * For use with org.joda.DateTime
+     * todo For use with org.joda.DateTime
      */
     public String format(DateTime commentedAt) {
         DateTime now = DateTime.now();
